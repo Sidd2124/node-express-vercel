@@ -4,7 +4,7 @@ const router = express.Router();
 let products = [
   {
     id: "1",
-    name: "Naresh",
+    name: "NaresH",
     number: "9666841615",
     imageURL: "https://i.ibb.co/4dcxwgY/Screenshot-2024-02-23-174428.png",
     insuranceDocument: "",

@@ -9,5 +9,5 @@ app.use(express.json());
 app.use("/", homeRouter);
 
 // connection
-const port = process.env.PORT || 4007;
+const port = process.env.PORT || 4001;
 app.listen(port, () => console.log(`Listening to port ${port}`));
