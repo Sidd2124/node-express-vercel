@@ -6,7 +6,7 @@ const homeRouter = require("./routes/home");
 
 // Middlewares
 app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' })); // Use bodyParser with JSON payload limit
+app.use(bodyParser.json({ limit: '300mb' })); // Use bodyParser with JSON payload limit
 app.use(express.json());
 
 // Routes
