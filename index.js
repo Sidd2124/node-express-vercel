@@ -6,8 +6,8 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use("/products", homeRouter);
+app.use("/", homeRouter);
 
 // connection
-const port = process.env.PORT || 9007;
+const port = process.env.PORT || 4007;
 app.listen(port, () => console.log(`Listening to port ${port}`));
