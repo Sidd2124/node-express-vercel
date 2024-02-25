@@ -1,42 +1,79 @@
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const serverless = require('serverless-http');
+
+const app = express();
 const router = express.Router();
-const mysql = require('mysql');
 
-// Create MySQL connection
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'Siddu',
-  password: 'Sidd@2124',
-  database: 'my_node_app_db'
-});
+// Enable CORS for all routes
+app.use(cors());
 
-// Connect to MySQL
-connection.connect();
+// Parse JSON bodies with increased payload limit (e.g., 50MB)
+app.use(bodyParser.json({ limit: '50mb' }));
 
-// GET all products
+let products = [
+  {
+    id: "1",
+    name: "Naresh",
+    number: "9666841615",
+    imageURL: "https://i.ibb.co/4dcxwgY/Screenshot-2024-02-23-174428.png",
+    insuranceDocument: "",
+    insuranceDate: "07/07/2023",
+    adharDocumentFront: "",
+    adharDocumentBack: "",
+    insuranceNo: "001",
+    aavuFront: "",
+    aavuBack: "",
+    aavuRight: "",
+    aavuLeft: ""
+  },
+];
+
+// Define routes
 router.get('/products', (req, res) => {
-  connection.query('SELECT * FROM products', (error, results) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json(results);
-    }
-  });
+  res.json(products);
 });
 
-// POST a new product
 router.post('/products', (req, res) => {
-  const newProduct = req.body;
+  const {
+    id,
+    name,
+    number,
+    imageURL,
+    insuranceDocument,
+    insuranceDate,
+    adharDocumentFront,
+    adharDocumentBack,
+    insuranceNo,
+    aavuFront,
+    aavuBack,
+    aavuRight,
+    aavuLeft
+  } = req.body;
 
-  connection.query('INSERT INTO products SET ?', newProduct, (error, results) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.status(201).json({ message: 'Product added successfully', product: newProduct });
-    }
-  });
+  const newProduct = {
+    id,
+    name,
+    number,
+    imageURL,
+    insuranceDocument,
+    insuranceDate,
+    adharDocumentFront,
+    adharDocumentBack,
+    insuranceNo,
+    aavuFront,
+    aavuBack,
+    aavuRight,
+    aavuLeft
+  };
+  products.push(newProduct);
+
+  res.status(201).json({ message: 'Product added successfully', product: newProduct });
 });
 
-module.exports = router;
+// Mount router
+app.use('/netlify/functions/api', router);
+
+// Wrap the app with serverless handler
+module.exports.handler = serverless(app);
