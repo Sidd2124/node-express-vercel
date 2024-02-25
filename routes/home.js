@@ -28,7 +28,7 @@ connection.connect((err) => {
 });
 
 // Define routes
-app.get('/api/products', (req, res) => {
+app.get('/api', (req, res) => {
   connection.query('SELECT * FROM data', (error, results, fields) => {
     if (error) {
       console.error('Error retrieving products: ' + error.message);
@@ -38,7 +38,7 @@ app.get('/api/products', (req, res) => {
   });
 });
 
-app.post('/api/products', (req, res) => {
+app.post('/api', (req, res) => {
   const {
     id,
     name,
