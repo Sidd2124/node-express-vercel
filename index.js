@@ -1,20 +1,16 @@
-
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
-
 
 const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
 
-// Parse JSON bodies with increased payload 
-app.use(bodyParser.json({ limit: '1gb' }));
+// Parse JSON bodies with increased payload limit (e.g., 1GB)
+app.use(bodyParser.json({ limit: '5gb' }));
 
-
+// Your existing routes and handlers
 const products = [
   {
     id: "",
@@ -46,11 +42,8 @@ app.post('/products', (req, res) => {
   res.status(201).json({ message: 'Product added successfully', product: newProduct });
 });
 
-
-
-
+// Start the server
 const PORT = process.env.PORT || 3009;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
