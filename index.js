@@ -5,7 +5,7 @@ const productRoutes = require('./routes/home'); // Path to your routes file
 const app = express();
 
 app.use(bodyParser.json());
-app.use('/api', productRoutes); // Mount the product routes under '/api'
+app.use('/', productRoutes); // Mount the product routes under '/api'
 
 const port = process.env.PORT || 3004;
 app.listen(port, () => {
