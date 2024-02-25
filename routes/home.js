@@ -1,19 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const serverless = require('serverless-http');
-const router = express.Router(); // Creating a router instance
-const app = express(); // Creating an Express app instance
+
+const app = express();
 
 // Enable CORS for all routes
-app.use(cors()); // Apply CORS to the Express app
+app.use(cors());
 
 // Parse JSON bodies with increased payload limit (e.g., 50MB)
-app.use(bodyParser.json({ limit: '50mb' })); // Apply body parser to the Express app
-
-// Rest of the code...
-
-// Rest of the code...
+app.use(bodyParser.json({ limit: '50mb' }));
 
 let products = [
   {
@@ -34,11 +29,11 @@ let products = [
 ];
 
 // Define routes
-router.get('/products', (req, res) => {
+app.get('/products', (req, res) => {
   res.json(products);
 });
 
-router.post('/products', (req, res) => {
+app.post('/products', (req, res) => {
   const {
     id,
     name,
@@ -75,8 +70,7 @@ router.post('/products', (req, res) => {
   res.status(201).json({ message: 'Product added successfully', product: newProduct });
 });
 
-// Mount router
-app.use('/products', router);
-
-// Wrap the app with serverless handler
-module.exports.handler = serverless(app);
+const PORT = process.env.PORT || 3009;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
