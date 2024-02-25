@@ -10,4 +10,5 @@ app.use('/products', productRoutes); // Mount the product routes under '/.netlif
 const port = process.env.PORT || 3005;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+  
 });
