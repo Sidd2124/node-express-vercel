@@ -29,11 +29,11 @@ let products = [
 ];
 
 // Define routes
-app.get('/products', (req, res) => {
+app.get('/api/products', (req, res) => { // Updated route to /api/products
   res.json(products);
 });
 
-app.post('/products', (req, res) => {
+app.post('/api/products', (req, res) => { // Updated route to /api/products
   const {
     id,
     name,
@@ -70,7 +70,5 @@ app.post('/products', (req, res) => {
   res.status(201).json({ message: 'Product added successfully', product: newProduct });
 });
 
-const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Export the app for serverless deployment
+module.exports = app;
