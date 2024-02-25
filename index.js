@@ -11,8 +11,9 @@ const app = express();
 // Enable CORS for all routes
 app.use(cors());
 
-// Parse JSON bodies with increased payload limit (e.g., 50MB)
-app.use(bodyParser.json({ limit: '50mb' }));
+// Parse JSON bodies with increased payload 
+app.use(bodyParser.json({ limit: '1gb' }));
+
 
 const products = [
   {
