@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/products', productRoutes); // Mount the product routes under '/.netlify/functions/api/products'
 
-const port = process.env.PORT || 3009;
+const port = process.env.PORT || 3005;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
