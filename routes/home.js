@@ -2,15 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
-
-const app = express();
-const router = express.Router();
+const router = express.Router(); // Creating a router instance
+const app = express(); // Creating an Express app instance
 
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors()); // Apply CORS to the Express app
 
 // Parse JSON bodies with increased payload limit (e.g., 50MB)
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({ limit: '50mb' })); // Apply body parser to the Express app
+
+// Rest of the code...
+
+// Rest of the code...
 
 let products = [
   {
@@ -73,7 +76,7 @@ router.post('/products', (req, res) => {
 });
 
 // Mount router
-app.use('/netlify/functions/api', router);
+app.use('/products', router);
 
 // Wrap the app with serverless handler
 module.exports.handler = serverless(app);
