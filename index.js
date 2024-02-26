@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -10,36 +11,47 @@ app.use(cors());
 // Parse JSON bodies with increased payload limit (e.g., 1GB)
 app.use(bodyParser.json({ limit: '5gb' }));
 
-// Your existing routes and handlers
-const products = [
-  {
-    id: "",
-    Name: "Naresh",
-    Number: "9666841615",
-    ImageURL: "https://i.ibb.co/4dcxwgY/Screenshot-2024-02-23-174428.png",
-    InsurenceDocument: "",
-    InsurenceDate: "07/07/2023",
-    AdharDocumentFront: "",
-    AdharDocumentBack: "",
-    InsurenceNo: "001",
-    AavuFront: "",
-    AavuBack: "",
-    AavuRight: "",
-    AavuLeft: ""
-  },
-];
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/products', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
-app.get('/products', (req, res) => {
-  res.json(products);
+// Define Product schema
+const productSchema = new mongoose.Schema({
+  id: String,
+  Name: String,
+  Number: String,
+  ImageURL: String,
+  InsurenceDocument: String,
+  InsurenceDate: String,
+  AdharDocumentFront: String,
+  AdharDocumentBack: String,
+  InsurenceNo: String,
+  AavuFront: String,
+  AavuBack: String,
+  AavuRight: String,
+  AavuLeft: String
 });
 
-app.post('/products', (req, res) => {
-  const { id, Name, Number, ImageURL, InsurenceDocument, InsurenceDate, AdharDocumentFront, AdharDocumentBack, InsurenceNo, AavuFront, AavuBack, AavuRight, AavuLeft } = req.body;
+const Product = mongoose.model('Product', productSchema);
 
-  const newProduct = { id, Name, Number, ImageURL, InsurenceDocument, InsurenceDate, AdharDocumentFront, AdharDocumentBack, InsurenceNo, AavuFront, AavuBack, AavuRight, AavuLeft };
-  products.push(newProduct);
+app.get('/products', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-  res.status(201).json({ message: 'Product added successfully', product: newProduct });
+app.post('/products', async (req, res) => {
+  try {
+    const newProduct = await Product.create(req.body);
+    res.status(201).json({ message: 'Product added successfully', product: newProduct });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Start the server
