@@ -1,78 +1,49 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
 
-// Parse JSON bodies with increased payload limit (e.g., 50MB)
-app.use(express.json({ limit: '50mb' }));
+// Parse JSON bodies with increased payload limit (e.g., 1GB)
+app.use(bodyParser.json({ limit: '5gb' }));
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: 'localhost',
-  user: 'Siddu',
-  password: 'Sidd@2124',
-  database: 'products'
+// Your existing routes and handlers
+const products = [
+  {
+    id: "",
+    Name: "Naresh",
+    Number: "9666841615",
+    ImageURL: "https://i.ibb.co/4dcxwgY/Screenshot-2024-02-23-174428.png",
+    InsurenceDocument: "",
+    InsurenceDate: "07/07/2023",
+    AdharDocumentFront: "",
+    AdharDocumentBack: "",
+    InsurenceNo: "001",
+    AavuFront: "",
+    AavuBack: "",
+    AavuRight: "",
+    AavuLeft: ""
+  },
+];
+
+app.get('/products', (req, res) => {
+  res.json(products);
 });
 
-// Define routes using router
-const router = express.Router();
+app.post('/products', (req, res) => {
+  const { id, Name, Number, ImageURL, InsurenceDocument, InsurenceDate, AdharDocumentFront, AdharDocumentBack, InsurenceNo, AavuFront, AavuBack, AavuRight, AavuLeft } = req.body;
 
-router.get('/api', (req, res) => {
-  pool.query('SELECT * FROM data', (error, results, fields) => {
-    if (error) {
-      console.error('Error retrieving products: ' + error.message);
-      return res.status(500).json({ error: 'Error retrieving products' });
-    }
-    res.json(results);
-  });
-});
+  const newProduct = { id, Name, Number, ImageURL, InsurenceDocument, InsurenceDate, AdharDocumentFront, AdharDocumentBack, InsurenceNo, AavuFront, AavuBack, AavuRight, AavuLeft };
+  products.push(newProduct);
 
-router.post('/api', (req, res) => {
-  const {
-    id,
-    name,
-    number,
-    imageURL,
-    insuranceDocument,
-    insuranceDate,
-    adharDocumentFront,
-    adharDocumentBack,
-    insuranceNo,
-    aavuFront,
-    aavuBack,
-    aavuRight,
-    aavuLeft
-  } = req.body;
-
-  const sql = 'INSERT INTO data (id, name, number, imageURL, insuranceDocument, insuranceDate, adharDocumentFront, adharDocumentBack, insuranceNo, aavuFront, aavuBack, aavuRight, aavuLeft) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  const values = [id, name, number, imageURL, insuranceDocument, insuranceDate, adharDocumentFront, adharDocumentBack, insuranceNo, aavuFront, aavuBack, aavuRight, aavuLeft];
-
-  pool.query(sql, values, (error, results, fields) => {
-    if (error) {
-      console.error('Error inserting product: ' + error.message);
-      return res.status(500).json({ error: 'Error inserting product' });
-    }
-    console.log('Product added successfully');
-    res.status(201).json({ message: 'Product added successfully', product: req.body });
-  });
-});
-
-// Mount the router on the app
-app.use('/', router);
-
-// Global error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(201).json({ message: 'Product added successfully', product: newProduct });
 });
 
 // Start the server
-const port = process.env.PORT || 3009;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 3009;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
